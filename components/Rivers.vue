@@ -14,9 +14,9 @@
         transition: opacity 0.6s ease-out;
       }
 
+      #carousel-0:checked ~ .control-0,
       #carousel-1:checked ~ .control-1,
       #carousel-2:checked ~ .control-2,
-      #carousel-4:checked ~ .control-4,
       #carousel-3:checked ~ .control-3 {
         display: block;
       }
@@ -51,10 +51,10 @@
           <div class="carousel-item absolute opacity-0 bg-center" :style="{ 'height':'500px', 'background-size': 'cover', 'backgroundImage': 'url(' + river + ')'} ">
 
           </div>
-          <label :for="['carousel-' + index | getPrevious]"
+          <label :for="['carousel-' + getPrevious(index)]"
                  class="control-1 w-10 h-10 ml-2 md:ml-10 absolute cursor-pointer hidden font-bold text-black hover:text-white rounded-full bg-white hover:bg-blue-700 leading-tight text-center z-10 inset-y-0 left-0 my-auto flex justify-center content-center"><i
             class="fas fa-angle-left mt-3"></i></label>
-          <label :for="['carousel-' + index | getNext]"
+          <label :for="['carousel-' + getNext(index)]"
                  :class="['next control-' + index +'w-10 h-10 mr-2 md:mr-10 absolute cursor-pointer hidden font-bold text-black hover:text-white rounded-full bg-white hover:bg-blue-700 leading-tight text-center z-10 inset-y-0 right-0 my-auto']"><i
             class="fas fa-angle-right mt-3"></i></label>
         </template>
@@ -84,7 +84,7 @@ export default {
   },
   methods: {
     getPrevious(i) {
-      var maxSize = this.props.rivers.length;
+      var maxSize = this.rivers.length;
       if (i === 0) {
         return maxSize;
       }
@@ -94,7 +94,7 @@ export default {
       return i - 1;
     },
     getNext(i) {
-      var maxSize = this.props.rivers.length;
+      var maxSize = this.rivers.length;
       if (i === maxSize) {
         return 0;
       }
