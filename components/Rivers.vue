@@ -1,55 +1,67 @@
 <template>
-  <div class="carousel relative rounded relative overflow-hidden shadow-xl">
-    <!-- Required font awesome -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css"/>
+  <div>
+    <Navbar/>
+    <div class="px-6 py-3">
+      <button
+        class="bg-purple-500 text-white active:bg-purple-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+        type="button" @click="getRivers">Show me some rivers
+      </button>
+    </div>
+    <div class="carousel relative rounded relative overflow-hidden shadow-xl" v-if="rivers.length > 0">
+      <!-- Required font awesome -->
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css"/>
 
-    <style>
-      .carousel-open:checked + .carousel-item {
-        position: static;
-        opacity: 100;
-      }
+      <style>
+        .carousel-open:checked + .carousel-item {
+          position: static;
+          opacity: 100;
+        }
 
-      .carousel-item {
-        -webkit-transition: opacity 0.6s ease-out;
-        transition: opacity 0.6s ease-out;
-      }
+        .carousel-item {
+          -webkit-transition: opacity 0.6s ease-out;
+          transition: opacity 0.6s ease-out;
+        }
 
-      #carousel-1:checked ~ .control-1,
-      #carousel-2:checked ~ .control-2,
-      #carousel-3:checked ~ .control-3,
-      #carousel-4:checked ~ .control-4 {
-        display: block;
-      }
+        #carousel-1:checked ~ .control-1,
+        #carousel-2:checked ~ .control-2,
+        #carousel-3:checked ~ .control-3,
+        #carousel-4:checked ~ .control-4 {
+          display: block;
+        }
 
-      .carousel-indicators {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        position: absolute;
-        bottom: 2%;
-        left: 0;
-        right: 0;
-        text-align: center;
-        z-index: 10;
-      }
+        .carousel-indicators {
+          list-style: none;
+          margin: 0;
+          padding: 0;
+          position: absolute;
+          bottom: 2%;
+          left: 0;
+          right: 0;
+          text-align: center;
+          z-index: 10;
+        }
 
-      #carousel-1:checked ~ .control-1 ~ .carousel-indicators li:nth-child(1) .carousel-bullet,
-      #carousel-2:checked ~ .control-2 ~ .carousel-indicators li:nth-child(2) .carousel-bullet,
-      #carousel-3:checked ~ .control-3 ~ .carousel-indicators li:nth-child(3) .carousel-bullet,
-      #carousel-4:checked ~ .control-4 ~ .carousel-indicators li:nth-child(4) .carousel-bullet {
-        color: #2b6cb0;
-        /*Set to match the Tailwind colour you want the active one to be */
-      }
-    </style>
+        #carousel-1:checked ~ .control-1 ~ .carousel-indicators li:nth-child(1) .carousel-bullet,
+        #carousel-2:checked ~ .control-2 ~ .carousel-indicators li:nth-child(2) .carousel-bullet,
+        #carousel-3:checked ~ .control-3 ~ .carousel-indicators li:nth-child(3) .carousel-bullet,
+        #carousel-4:checked ~ .control-4 ~ .carousel-indicators li:nth-child(4) .carousel-bullet {
+          color: #2b6cb0;
+          /*Set to match the Tailwind colour you want the active one to be */
+        }
+      </style>
       <div class="carousel-inner relative overflow-hidden w-full">
         <template v-for="(river, index) in rivers">
           <!--Slide i-->
-          <input class="carousel-open" type="radio" :id="['carousel-' + getCurrent(index) ]" name="carousel" aria-hidden="true"
+          <input class="carousel-open" type="radio" :id="['carousel-' + getCurrent(index) ]" name="carousel"
+                 aria-hidden="true"
                  hidden=""
                  checked="checked">
-          <div class="carousel-item absolute opacity-0 bg-center" :style="{ 'height':'500px', 'background-size': 'cover', 'backgroundImage': 'url(' + river + ')'} ">
-
+          <div class="carousel-item absolute opacity-0 bg-center"
+               :style="{ 'height':'500px', 'background-size': 'cover', 'backgroundImage': 'url(' + river.url + ')'} ">
+            <span style="position: absolute; bottom: 0; background-color: white;" class="px-3 py-3">{{ river.label }}</span>
+            <span style="position: absolute; z-index:9999; bottom: -10px; background-color: white;" class="px-3 py-3">{{ river.description }}</span>
           </div>
+
           <label :for="['carousel-' + getPrevious(getCurrent(index))]"
                  :class="['control-' + getCurrent(index) + ' w-10 h-10 ml-2 md:ml-10 absolute cursor-pointer hidden font-bold text-black hover:text-white rounded-full bg-white hover:bg-blue-700 leading-tight text-center z-10 inset-y-0 left-0 my-auto flex justify-center content-center']"><i
             class="fas fa-angle-left mt-3"></i></label>
@@ -67,17 +79,19 @@
         </ol>
 
       </div>
+    </div>
   </div>
 </template>
 
 
 <script>
+import $ from 'jquery'
 export default {
   name: "Rivers",
-  props: {
-    rivers: {
-      type: Array,
-      required: true
+  data() {
+    return {
+      hidden: true,
+      rivers: []
     }
   },
   methods: {
@@ -97,6 +111,22 @@ export default {
     },
     getCurrent(i) {
       return i + 1;
+    },
+    toggleHidden() {
+      // alert("hi");
+      // alert("Hidden is:" + this.hidden);
+      this.hidden = !this.hidden;
+      //alert("Now hidden is:" + this.hidden);
+    },
+    getRivers() {
+      var rivers = [];
+      $.getJSON("https://api.nuxtjs.dev/rivers", function (data) {
+        data.forEach(
+          x => rivers.push({label: x.title, length: x.length.split(" ")[0], url: x.image, description: x.description})
+        )
+      })
+      rivers.sort((a,b) => a.length > b.length ? a : b);
+      this.rivers = rivers;
     }
   }
 }
