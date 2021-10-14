@@ -41,7 +41,6 @@
         /*Set to match the Tailwind colour you want the active one to be */
       }
     </style>
-    <div class="carousel relative rounded relative overflow-hidden shadow-xl">
       <div class="carousel-inner relative overflow-hidden w-full">
         <template v-for="(river, index) in rivers">
           <!--Slide i-->
@@ -52,10 +51,10 @@
 
           </div>
           <label :for="['carousel-' + getPrevious(getCurrent(index))]"
-                 class="control-1 w-10 h-10 ml-2 md:ml-10 absolute cursor-pointer hidden font-bold text-black hover:text-white rounded-full bg-white hover:bg-blue-700 leading-tight text-center z-10 inset-y-0 left-0 my-auto flex justify-center content-center"><i
+                 :class="['control-' + getCurrent(index) + ' w-10 h-10 ml-2 md:ml-10 absolute cursor-pointer hidden font-bold text-black hover:text-white rounded-full bg-white hover:bg-blue-700 leading-tight text-center z-10 inset-y-0 left-0 my-auto flex justify-center content-center']"><i
             class="fas fa-angle-left mt-3"></i></label>
           <label :for="['carousel-' + getNext(getCurrent(index))]"
-                 :class="['next control-' + getCurrent(index) +'w-10 h-10 mr-2 md:mr-10 absolute cursor-pointer hidden font-bold text-black hover:text-white rounded-full bg-white hover:bg-blue-700 leading-tight text-center z-10 inset-y-0 right-0 my-auto']"><i
+                 :class="['next control-' + getCurrent(index) +' w-10 h-10 mr-2 md:mr-10 absolute cursor-pointer hidden font-bold text-black hover:text-white rounded-full bg-white hover:bg-blue-700 leading-tight text-center z-10 inset-y-0 right-0 my-auto']"><i
             class="fas fa-angle-right mt-3"></i></label>
         </template>
 
@@ -68,7 +67,6 @@
         </ol>
 
       </div>
-    </div>
   </div>
 </template>
 
@@ -93,7 +91,7 @@ export default {
     getNext(i) {
       var maxSize = this.rivers.length;
       if (i === maxSize) {
-        return 0;
+        return 1;
       }
       return i + 1;
     },
