@@ -51,10 +51,10 @@
           <div class="carousel-item absolute opacity-0 bg-center" :style="{ 'height':'500px', 'background-size': 'cover', 'backgroundImage': 'url(' + river + ')'} ">
 
           </div>
-          <label :for="['carousel-' + index]"
+          <label :for="['carousel-' + index | getPrevious]"
                  class="control-1 w-10 h-10 ml-2 md:ml-10 absolute cursor-pointer hidden font-bold text-black hover:text-white rounded-full bg-white hover:bg-blue-700 leading-tight text-center z-10 inset-y-0 left-0 my-auto flex justify-center content-center"><i
             class="fas fa-angle-left mt-3"></i></label>
-          <label :for="['carousel-' + index]"
+          <label :for="['carousel-' + index | getNext]"
                  :class="['next control-' + index +'w-10 h-10 mr-2 md:mr-10 absolute cursor-pointer hidden font-bold text-black hover:text-white rounded-full bg-white hover:bg-blue-700 leading-tight text-center z-10 inset-y-0 right-0 my-auto']"><i
             class="fas fa-angle-right mt-3"></i></label>
         </template>
@@ -80,6 +80,25 @@ export default {
     rivers: {
       type: Array,
       required: true
+    }
+  },
+  methods: {
+    getPrevious(i) {
+      var maxSize = this.props.rivers.length;
+      if (i === 0) {
+        return maxSize;
+      }
+      if (i === maxSize) {
+        return 0;
+      }
+      return i - 1;
+    },
+    getNext(i) {
+      var maxSize = this.props.rivers.length;
+      if (i === maxSize) {
+        return 0;
+      }
+      return i + 1;
     }
   }
 }
