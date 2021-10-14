@@ -1,0 +1,19 @@
+{
+  "name": "rivers",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt -p 8082",
+    "build": "nuxt build",
+    "start": "nuxt start -p 8082",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "core-js": "^3.15.1",
+    "nuxt": "^2.15.7"
+  },
+  "devDependencies": {
+    "@nuxtjs/tailwindcss": "^4.2.0",
+    "postcss": "^8.3.5"
+  }
+}
