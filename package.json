@@ -13,7 +13,8 @@
     "nuxt": "^2.15.7",
     "jquery": "^3.6.0",
     "axios": "^0.23.0",
-    "@nuxtjs/color-mode": "^2.1.1"
+    "@nuxtjs/color-mode": "^2.1.1",
+    "tailwindcss-dark-mode": "^1.1.7"
   },
   "devDependencies": {
     "@nuxtjs/tailwindcss": "^4.2.0",

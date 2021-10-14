@@ -1,11 +1,13 @@
 module.exports = {
+  theme: {
+    darkSelector: '.dark-mode'
+  },
   purge: [],
   darkMode: 'media', // or 'media' or 'class'
-  theme: {
-    extend: {},
-  },
   variants: {
     extend: {},
   },
-  plugins: [],
+  plugins: [
+    require('tailwindcss-dark-mode')()
+  ],
 }

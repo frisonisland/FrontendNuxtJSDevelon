@@ -1,42 +1,18 @@
 <template>
   <div class="dark">
     <Navbar/>
-    <div class="px-6 py-3">
-      <button
-        class="bg-purple-500 text-white active:bg-purple-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-        type="button" @click="getRivers">Show me some rivers
-      </button>
-    </div>
-    <div v-if="this.currentRiver != null">
+    <div>
       <!-- Required font awesome -->
       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css"/>
-
-      <style>
-        .carousel-open:checked + .carousel-item {
-          position: static;
-          opacity: 100;
-        }
-
-        .carousel-item {
-          -webkit-transition: opacity 0.6s ease-out;
-          transition: opacity 0.6s ease-out;
-        }
-
-        .carousel-indicators {
-          list-style: none;
-          margin: 0;
-          padding: 0;
-          position: absolute;
-          bottom: 2%;
-          left: 0;
-          right: 0;
-          text-align: center;
-          z-index: 10;
-        }
-      </style>
-      <div>
-        <div
-          class="px-3 rounded overflow-hidden shadow-lg mb-4 dark:bg-gray-900"
+      <div class="px-3 py-3 rounded overflow-hidden shadow-lg mb-4 dark:bg-gray-900" style="min-height: 100vh">
+        <div class="px-3">
+          <button
+            class="bg-purple-500 text-white active:bg-purple-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+            type="button" @click="getRivers">Show me some rivers
+          </button>
+        </div>
+        <div v-if="this.currentRiver != null"
+             class="px-3 py-3 rounded overflow-hidden shadow-lg mb-4 dark:bg-gray-900"
         >
           <img
             :src="[this.currentRiver.url]"
@@ -45,12 +21,12 @@
           />
           <div class="inline-flex">
             <button
-              class="bg-transparent-300 hover:bg-transparent-400 text-transparent-800 font-bold py-2 px-4 rounded-l"
+              class="bg-transparent-300 hover:bg-transparent-400 dark:text-white text-transparent-800 font-bold py-2 px-4 rounded-l"
               @click="getPrevious">
               Prev
             </button>
             <button
-              class="bg-transparent-300 hover:bg-transparent-400 text-transparent-800 font-bold py-2 px-4 rounded-r"
+              class="bg-transparent-300 hover:bg-transparent-400 dark:text-white text-transparent-800 font-bold py-2 px-4 rounded-r"
               @click="getNext">
               Next
             </button>

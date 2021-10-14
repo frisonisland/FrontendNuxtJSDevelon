@@ -8,13 +8,14 @@
         name="toggle"
         id="toggle"
         class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"
+        @click="toggleDark"
       />
       <label
         for="toggle"
         class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"
       ></label>
     </div>
-    <label for="toggle" class="text-xs text-gray-700">Dark Mode.</label>
+    <label for="toggle" class="text-xs text-gray-700 dark:text-white">Dark Mode</label>
   </div>
 </template>
 
@@ -32,3 +33,22 @@
   background-color: #68d391;
 }
 </style>
+
+
+<script>
+import $ from 'jquery'
+
+export default {
+  colorMode: 'light',
+  name: "SwitchDark",
+  methods: {
+    toggleDark() {
+      if (this.$colorMode.value === 'light') {
+        this.$colorMode.value = 'dark';
+        return;
+      }
+      this.$colorMode.value = 'light';
+    }
+  }
+}
+</script>
