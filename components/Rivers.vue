@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="dark">
     <Navbar/>
     <div class="px-6 py-3">
       <button
@@ -7,7 +7,7 @@
         type="button" @click="getRivers">Show me some rivers
       </button>
     </div>
-    <div class="carousel relative rounded relative overflow-hidden shadow-xl" v-if="this.currentRiver != null">
+    <div v-if="this.currentRiver != null">
       <!-- Required font awesome -->
       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css"/>
 
@@ -34,32 +34,38 @@
           z-index: 10;
         }
       </style>
-      <div class="carousel-inner relative overflow-hidden w-full">
-        <div class="bg-white px-3 py-3">
-          <img class="object-cover h-48 w-full ..." :src="this.currentRiver.url" style="max-width:500px">
+      <div>
+        <div
+          class="px-3 rounded overflow-hidden shadow-lg mb-4 dark:bg-gray-900"
+        >
+          <img
+            :src="[this.currentRiver.url]"
+            :alt="[this.currentRiver.label]"
+            style="max-height: 500px"
+          />
           <div class="inline-flex">
-            <button class="bg-transparent-300 hover:bg-transparent-400 text-transparent-800 font-bold py-2 px-4 rounded-l" @click="getPrevious">
+            <button
+              class="bg-transparent-300 hover:bg-transparent-400 text-transparent-800 font-bold py-2 px-4 rounded-l"
+              @click="getPrevious">
               Prev
             </button>
-            <button class="bg-transparent-300 hover:bg-transparent-400 text-transparent-800 font-bold py-2 px-4 rounded-r" @click="getNext">
+            <button
+              class="bg-transparent-300 hover:bg-transparent-400 text-transparent-800 font-bold py-2 px-4 rounded-r"
+              @click="getNext">
               Next
             </button>
           </div>
-          <div>
-            <p class="px-3 py-3">{{ this.currentRiver.label }}: {{this.currentRiver.length}} Km</p>
-            <p
-              class="px-3 py-3">{{ this.currentRiver.description }}</p>
+          <div class="px-6 py-4 pb-2">
+            <div class="font-bold text-xl mb-2 dark:text-white">
+              {{ this.currentRiver.index + 1 }}. {{ this.currentRiver.label }}:
+              {{ this.currentRiver.length }} Km
+            </div>
+            <p class="text-gray-700 dark:text-gray-300 text-base">
+              {{ this.currentRiver.description }}
+            </p>
           </div>
         </div>
-
-        <label
-          :class="['control w-10 h-10 ml-2 md:ml-10 absolute cursor-pointer hidden font-bold text-black hover:text-white rounded-full bg-white hover:bg-blue-700 leading-tight text-center z-10 inset-y-0 left-0 my-auto flex justify-center content-center']"><i
-          class="fas fa-angle-left mt-3"></i></label>
-        <label
-          :class="['next control- w-10 h-10 mr-2 md:mr-10 absolute cursor-pointer hidden font-bold text-black hover:text-white rounded-full bg-white hover:bg-blue-700 leading-tight text-center z-10 inset-y-0 right-0 my-auto']"><i
-          class="fas fa-angle-right mt-3"></i></label>
       </div>
-
     </div>
   </div>
 </template>
@@ -106,12 +112,13 @@ export default {
         data.forEach(
           x => tmpRivers.push({
             label: x.title,
-            length: x.length.split(" ")[0],
+            length: parseInt(x.length.split(" ")[0].replace(",", "")),
             url: x.image,
             description: x.description
           })
         )
-        tmpRivers = tmpRivers.sort((a, b) => a.length > b.length ? a : b);
+        //compare: >0, b before a, <0 a before b
+        tmpRivers = tmpRivers.sort((a, b) => a.length > b.length ? -1 : 1);
         this.nRivers = tmpRivers.length;
         tmpRivers.forEach((x, index) => {
             console.log(x);
