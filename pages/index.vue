@@ -1,5 +1,5 @@
 <template>
-  <Rivers />
+  <Rivers :rivers="['volga.jpg', 'don.jpg']" />
 </template>
 
 <script>
