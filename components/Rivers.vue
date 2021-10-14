@@ -14,10 +14,10 @@
         transition: opacity 0.6s ease-out;
       }
 
-      #carousel-0:checked ~ .control-0,
       #carousel-1:checked ~ .control-1,
       #carousel-2:checked ~ .control-2,
-      #carousel-3:checked ~ .control-3 {
+      #carousel-3:checked ~ .control-3,
+      #carousel-4:checked ~ .control-4 {
         display: block;
       }
 
@@ -45,24 +45,24 @@
       <div class="carousel-inner relative overflow-hidden w-full">
         <template v-for="(river, index) in rivers">
           <!--Slide i-->
-          <input class="carousel-open" type="radio" :id="['carousel-' + index ]" name="carousel" aria-hidden="true"
+          <input class="carousel-open" type="radio" :id="['carousel-' + getCurrent(index) ]" name="carousel" aria-hidden="true"
                  hidden=""
                  checked="checked">
           <div class="carousel-item absolute opacity-0 bg-center" :style="{ 'height':'500px', 'background-size': 'cover', 'backgroundImage': 'url(' + river + ')'} ">
 
           </div>
-          <label :for="['carousel-' + getPrevious(index)]"
+          <label :for="['carousel-' + getPrevious(getCurrent(index))]"
                  class="control-1 w-10 h-10 ml-2 md:ml-10 absolute cursor-pointer hidden font-bold text-black hover:text-white rounded-full bg-white hover:bg-blue-700 leading-tight text-center z-10 inset-y-0 left-0 my-auto flex justify-center content-center"><i
             class="fas fa-angle-left mt-3"></i></label>
-          <label :for="['carousel-' + getNext(index)]"
-                 :class="['next control-' + index +'w-10 h-10 mr-2 md:mr-10 absolute cursor-pointer hidden font-bold text-black hover:text-white rounded-full bg-white hover:bg-blue-700 leading-tight text-center z-10 inset-y-0 right-0 my-auto']"><i
+          <label :for="['carousel-' + getNext(getCurrent(index))]"
+                 :class="['next control-' + getCurrent(index) +'w-10 h-10 mr-2 md:mr-10 absolute cursor-pointer hidden font-bold text-black hover:text-white rounded-full bg-white hover:bg-blue-700 leading-tight text-center z-10 inset-y-0 right-0 my-auto']"><i
             class="fas fa-angle-right mt-3"></i></label>
         </template>
 
         <!-- Add additional indicators for each slide-->
         <ol class="carousel-indicators">
           <li class="inline-block mr-3" v-for="(river, index) in rivers">
-            <label :for="['carousel-' + index]"
+            <label :for="['carousel-' + getCurrent(index)]"
                    class="carousel-bullet cursor-pointer block text-4xl text-white hover:text-blue-700">•</label>
           </li>
         </ol>
@@ -85,11 +85,8 @@ export default {
   methods: {
     getPrevious(i) {
       var maxSize = this.rivers.length;
-      if (i === 0) {
+      if (i === 1) {
         return maxSize;
-      }
-      if (i === maxSize) {
-        return 0;
       }
       return i - 1;
     },
@@ -98,6 +95,9 @@ export default {
       if (i === maxSize) {
         return 0;
       }
+      return i + 1;
+    },
+    getCurrent(i) {
       return i + 1;
     }
   }
