@@ -41,7 +41,7 @@
           <img
             :src="[this.currentRiver.url]"
             :alt="[this.currentRiver.label]"
-            style="max-height: 500px"
+            style="height: 300px"
           />
           <div class="inline-flex">
             <button
