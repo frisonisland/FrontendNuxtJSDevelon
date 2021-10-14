@@ -7,7 +7,7 @@
         type="button" @click="getRivers">Show me some rivers
       </button>
     </div>
-    <div class="carousel relative rounded relative overflow-hidden shadow-xl" v-if="rivers.length > 0">
+    <div class="carousel relative rounded relative overflow-hidden shadow-xl" v-if="this.currentRiver != null">
       <!-- Required font awesome -->
       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css"/>
 
@@ -22,13 +22,6 @@
           transition: opacity 0.6s ease-out;
         }
 
-        #carousel-1:checked ~ .control-1,
-        #carousel-2:checked ~ .control-2,
-        #carousel-3:checked ~ .control-3,
-        #carousel-4:checked ~ .control-4 {
-          display: block;
-        }
-
         .carousel-indicators {
           list-style: none;
           margin: 0;
@@ -40,45 +33,33 @@
           text-align: center;
           z-index: 10;
         }
-
-        #carousel-1:checked ~ .control-1 ~ .carousel-indicators li:nth-child(1) .carousel-bullet,
-        #carousel-2:checked ~ .control-2 ~ .carousel-indicators li:nth-child(2) .carousel-bullet,
-        #carousel-3:checked ~ .control-3 ~ .carousel-indicators li:nth-child(3) .carousel-bullet,
-        #carousel-4:checked ~ .control-4 ~ .carousel-indicators li:nth-child(4) .carousel-bullet {
-          color: #2b6cb0;
-          /*Set to match the Tailwind colour you want the active one to be */
-        }
       </style>
       <div class="carousel-inner relative overflow-hidden w-full">
-        <template v-for="(river, index) in rivers">
-          <!--Slide i-->
-          <input class="carousel-open" type="radio" :id="['carousel-' + getCurrent(index) ]" name="carousel"
-                 aria-hidden="true"
-                 hidden=""
-                 checked="checked">
-          <div class="carousel-item absolute opacity-0 bg-center"
-               :style="{ 'height':'500px', 'background-size': 'cover', 'backgroundImage': 'url(' + river.url + ')'} ">
-            <span style="position: absolute; bottom: 0; background-color: white;" class="px-3 py-3">{{ river.label }}</span>
-            <span style="position: absolute; z-index:9999; bottom: -10px; background-color: white;" class="px-3 py-3">{{ river.description }}</span>
+        <div class="bg-white px-3 py-3">
+          <img class="object-cover h-48 w-full ..." :src="this.currentRiver.url" style="max-width:500px">
+          <div class="inline-flex">
+            <button class="bg-transparent-300 hover:bg-transparent-400 text-transparent-800 font-bold py-2 px-4 rounded-l" @click="getPrevious">
+              Prev
+            </button>
+            <button class="bg-transparent-300 hover:bg-transparent-400 text-transparent-800 font-bold py-2 px-4 rounded-r" @click="getNext">
+              Next
+            </button>
           </div>
+          <div>
+            <p class="px-3 py-3">{{ this.currentRiver.label }}: {{this.currentRiver.length}} Km</p>
+            <p
+              class="px-3 py-3">{{ this.currentRiver.description }}</p>
+          </div>
+        </div>
 
-          <label :for="['carousel-' + getPrevious(getCurrent(index))]"
-                 :class="['control-' + getCurrent(index) + ' w-10 h-10 ml-2 md:ml-10 absolute cursor-pointer hidden font-bold text-black hover:text-white rounded-full bg-white hover:bg-blue-700 leading-tight text-center z-10 inset-y-0 left-0 my-auto flex justify-center content-center']"><i
-            class="fas fa-angle-left mt-3"></i></label>
-          <label :for="['carousel-' + getNext(getCurrent(index))]"
-                 :class="['next control-' + getCurrent(index) +' w-10 h-10 mr-2 md:mr-10 absolute cursor-pointer hidden font-bold text-black hover:text-white rounded-full bg-white hover:bg-blue-700 leading-tight text-center z-10 inset-y-0 right-0 my-auto']"><i
-            class="fas fa-angle-right mt-3"></i></label>
-        </template>
-
-        <!-- Add additional indicators for each slide-->
-        <ol class="carousel-indicators">
-          <li class="inline-block mr-3" v-for="(river, index) in rivers">
-            <label :for="['carousel-' + getCurrent(index)]"
-                   class="carousel-bullet cursor-pointer block text-4xl text-white hover:text-blue-700">•</label>
-          </li>
-        </ol>
-
+        <label
+          :class="['control w-10 h-10 ml-2 md:ml-10 absolute cursor-pointer hidden font-bold text-black hover:text-white rounded-full bg-white hover:bg-blue-700 leading-tight text-center z-10 inset-y-0 left-0 my-auto flex justify-center content-center']"><i
+          class="fas fa-angle-left mt-3"></i></label>
+        <label
+          :class="['next control- w-10 h-10 mr-2 md:mr-10 absolute cursor-pointer hidden font-bold text-black hover:text-white rounded-full bg-white hover:bg-blue-700 leading-tight text-center z-10 inset-y-0 right-0 my-auto']"><i
+          class="fas fa-angle-right mt-3"></i></label>
       </div>
+
     </div>
   </div>
 </template>
@@ -86,47 +67,61 @@
 
 <script>
 import $ from 'jquery'
+import * as axios from "axios";
+
 export default {
   name: "Rivers",
   data() {
     return {
       hidden: true,
-      rivers: []
+      rivers: {},
+      currentRiver: null,
+      nRivers: 0
     }
   },
   methods: {
-    getPrevious(i) {
-      var maxSize = this.rivers.length;
-      if (i === 1) {
-        return maxSize;
+    getPrevious() {
+      var index = this.currentRiver.index - 1;
+      console.log("Previous is:" + index);
+      if (index < 1) {
+        index = this.nRivers - 1;
       }
-      return i - 1;
+      console.log(index);
+      console.log(this.rivers);
+      this.currentRiver = this.rivers[index];
     },
-    getNext(i) {
-      var maxSize = this.rivers.length;
-      if (i === maxSize) {
-        return 1;
+    getNext() {
+      var index = this.currentRiver.index + 1;
+      console.log("Next is:" + index);
+      if (index === this.nRivers) {
+        index = 0;
       }
-      return i + 1;
+      this.currentRiver = this.rivers[index];
     },
-    getCurrent(i) {
-      return i + 1;
-    },
-    toggleHidden() {
-      // alert("hi");
-      // alert("Hidden is:" + this.hidden);
-      this.hidden = !this.hidden;
-      //alert("Now hidden is:" + this.hidden);
-    },
+
     getRivers() {
-      var rivers = [];
-      $.getJSON("https://api.nuxtjs.dev/rivers", function (data) {
+      axios.get("https://api.nuxtjs.dev/rivers").then(response => {
+        var tmpRivers = [];
+        var data = response.data;
         data.forEach(
-          x => rivers.push({label: x.title, length: x.length.split(" ")[0], url: x.image, description: x.description})
+          x => tmpRivers.push({
+            label: x.title,
+            length: x.length.split(" ")[0],
+            url: x.image,
+            description: x.description
+          })
         )
+        tmpRivers = tmpRivers.sort((a, b) => a.length > b.length ? a : b);
+        this.nRivers = tmpRivers.length;
+        tmpRivers.forEach((x, index) => {
+            console.log(x);
+            console.log(index);
+            x.index = index;
+            this.rivers[index] = x; // map key, value for rivers
+          }
+        );
+        this.currentRiver = tmpRivers[0]
       })
-      rivers.sort((a,b) => a.length > b.length ? a : b);
-      this.rivers = rivers;
     }
   }
 }
